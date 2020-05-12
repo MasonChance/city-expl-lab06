@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 const cors = require('cors');
 
 app.use(cors());
@@ -19,5 +19,8 @@ app.get('/location', (req, res) => {
   res.send('Im the Information');
   
 });
+
+
+
 
 app.listen(PORT, () => console.log('I am ALIVE!!')); // local host server test
