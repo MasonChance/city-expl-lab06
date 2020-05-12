@@ -9,17 +9,15 @@ const cors = require('cors');
 
 app.use(cors());
 
-app.listen(PORT, () => console.log('I am ALIVE!!')); // local host server test
 
 console.log(PORT); // local host port test
 
-app.get('./geo', (req, res) => {
-
-  const location = req('./data/geo.json');
-
-  res.send({
-    console.log('im the information')
-  });
+app.get('/location', (req, res) => {
+  
+  const location = require('./data/geo.json');
+  
+  res.send('Im the Information');
   
 });
 
+app.listen(PORT, () => console.log('I am ALIVE!!')); // local host server test
