@@ -2,7 +2,7 @@
   "name": "city-explorer-api",
   "version": "1.0.0",
   "description": "backend api/server excercise",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "jest --coverage --verbose",
     "watch": "jest --watchAll",
