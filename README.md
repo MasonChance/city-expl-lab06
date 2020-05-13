@@ -23,7 +23,7 @@ This application will be a stand-alone app that interacts with a static front en
 <!-- Provide a detailed description of the application design. What technologies (languages, libraries, etc) you're using, and any other relevant design information. -->
 
 ## Change Log
-Number and name of feature: Feature #2 Location Route
+Feature #2 Location Route
 
 Estimate of time needed to complete: _____
 
@@ -32,6 +32,20 @@ Start time: _____
 Finish time: _____
 
 Actual time needed to complete: _____
+
+01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource.
+
+### Feature 3 /weather results w/jsonfile
+
+Estimate of time needed to complete: 60min
+
+Start time: 17:00
+
+Finish time: _____
+
+Actual time needed to complete: _____
+
+05-12-2020 ??:?? - Application now has __________, with a GET route for the location resource.
 
 <!-- Use this area to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an examples:
 
@@ -52,4 +66,3 @@ Actual time needed to complete: _____
 
 ## Credits and Collaborations
 <!-- Give credit (and a link) to other people or resources that helped you build this application. -->
--->
