@@ -35,23 +35,18 @@ app.get('/location', (req, res) => {
 
 */
 
-app.get('/weather', (req, res) =>{
-  req = require('./data/darksky.json');
-
-  const forecastInJson = req.data[0].weather.description;
-  const timeInJson = req.data[0].datetime;
-
-  const result = new WeatherData(forecastInJson, timeInJson);
-  
+app.get('/weather', (req, res) => {
+  req = require('./data/darksky.json');   
+    const result = req.data.map((current) => {
+    return new WeatherData(current);  
+  })
   res.send(result);
-
-  });
+});
 
 //==== constructor for /weather data from JSON ====//
-const WeatherData = function(forecast, time){
-  this.forecast = forecast;
-  this.time = time;
-  
+const WeatherData = function(result){
+  this.forecast = result.weather.description;
+  this.time = result.datetime;  
 }
 
 
