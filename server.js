@@ -40,20 +40,10 @@ app.get('/weather', (req, res) =>{
 
   const forecastInJson = req.data[0].weather.description;
   const timeInJson = req.data[0].datetime;
-  // let formattedTime = (input, yr, mo, day) =>{
-  //   input = timeInJson.split('-');
-  //   yr = input[0];
-  //   mo = input[1];
-  //   day = input[2];
-  //   const newDate = new Date(yr, mo, day);
-  //   return newDate;
-  // };
 
-  // formattedTime = formattedTime.toDateString();
-
-  // const result = new WeatherData(forecastInJson, formattedTime);
-  console.log(req.data[0]);
-  res.send(req);
+  const result = new WeatherData(forecastInJson, timeInJson);
+  
+  res.send(result);
 
   });
 
