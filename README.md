@@ -56,12 +56,12 @@ Estimate of time needed to complete: 120min
 
 Start time: 16:15
 
-Finish time: _____
+Finish time: 18:20
 
-Actual time needed to complete: _____
+Actual time needed to complete: 2hrs
 
 
-01-01-2001 4:59pm - Application now has acess to LocationIQ API, using a GET route for the location resource, utilizing 'superagent' to formulate the API query.
+05-13-2020 18:29 - Application now has acess to LocationIQ API, using a GET route for the location resource, utilizing 'superagent' to formulate the API query.
 
 <!-- Use this area to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an examples:
 

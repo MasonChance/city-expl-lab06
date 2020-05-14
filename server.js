@@ -14,10 +14,8 @@ app.use(cors()); // invokes use method on express, passing in the cors invocatio
 
 //===== location data with the Json ===//
 app.get('/location', (req, res) => {
- /* !!! the following  lines were specific to using a json file that exists in the file directory of the App. // req = require('./data/geo.json'); // starting over with json baseline
-  // const result = new LocationData (req[0]);
-  // res.send(result);  */
-  console.log('req:', req.body);
+ 
+  console.log('req:', req);
   //TODO: refactor to use superagent and APIquery
   const locatIq_Url = 'https://us1.locationiq.com/v1/search.php'; //childOf locationIQ
   const city_toBeSearched = req.query.city; // childOf front-end
@@ -31,7 +29,7 @@ app.get('/location', (req, res) => {
   superagent.get(locatIq_Url)
     .query(superQueryParam)
     .then(result_locatIq => {
-      const newLocation = new LocationData(result_locatIq.body);
+      const newLocation = new LocationData(city_toBeSearched, result_locatIq.body[0]);
       console.log('newLocation:',  newLocation);
       res.send(newLocation).status(200); // `.status(200)` is arbitrary success msg
     })
@@ -48,12 +46,12 @@ app.get('/location', (req, res) => {
 
 
 // ==== Location data Constructor =====// 
-function LocationData(result_locatIq){
-  
+function LocationData(city_toBeSearched, result_locatIq){
+  console.log('resul_locatIq', result_locatIq);
   this.search_query = city_toBeSearched;
-  this.formatted_query = result_locatIq.body.display_name;
-  this.latitude = result_locatIq.body.lat;
-  this.longitude = result_locatIq.body.lon;
+  this.formatted_query = result_locatIq.display_name;
+  this.latitude = result_locatIq.lat;
+  this.longitude = result_locatIq.lon;
 }
 
 
@@ -78,4 +76,4 @@ function WeatherData(result){
 
 
 // ===== spins up server on local and tests it===// see https://limitless-peak-33770.herokuapp.com/ for deployed app. 
-app.listen(PORT, () => console.log(`I am ALIVE on: ${PORT} !!`)); // local host server test
+app.listen(PORT, () => console.log(`I am ded!!: ${PORT} !!`)); // local host server test
