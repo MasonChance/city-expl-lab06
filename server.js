@@ -13,15 +13,11 @@ const GEOCODE_API_KEY = process.env.GEOCODE_API_KEY;
 const WEATHERBIT_API_KEY = process.env.WEATHERBIT_API_KEY;
 app.use(cors()); // invokes use method on express, passing in the cors invocation. 
 
-app.get('/',(req, res) =>{
-  console.log('who am I?');
-  
- })
+
 
 //===== location data with the Json ===//
 app.get('/location', (req, res) => {
   console.log('here:');
-  //TODO: refactor to use superagent and APIquery
   const locatIq_Url = 'https://us1.locationiq.com/v1/search.php'; //childOf locationIQ
   const city_toBeSearched = req.query.city; // childOf front-end
   const superQueryParam = {
@@ -32,21 +28,12 @@ app.get('/location', (req, res) => {
   
   superagent.get(locatIq_Url)
     .query(superQueryParam)
-    .then(result_locatIq => {
-      const newLocation = new LocationData(city_toBeSearched, result_locatIq.body[0]);
-      
-      res.send(newLocation).status(200); // `.status(200)` is arbitrary success msg
-    })
-    //TODO: needs a .catch to handle promise. 
-    .catch(error => {
-     
-      res.send(error).status(500); // `.status(500)` is arbitrary. specific errors can be choosen but this is the default. 
-    });
+    .then(result_locatIq => res.send(new LocationData(city_toBeSearched, result_locatIq.body[0])).status(200))
+    .catch(error => res.send(`${error} something went wrong`).status(500))
 
 });
 
-
-// ==== Location data Constructor =====// 
+// ==== Location data Constructor for LocationIQ Data =====// 
 function LocationData(city_toBeSearched, result_locatIq){
   
   this.search_query = city_toBeSearched;
@@ -55,49 +42,39 @@ function LocationData(city_toBeSearched, result_locatIq){
   this.longitude = result_locatIq.lon;
 }
 
-
 // === weather data using .map and Json file ==//
 app.get('/weather', (req, res) => {
   
   const weatherBit_Url = 'https://api.weatherbit.io/v2.0/forecast/daily';
-  const city_toBeSearched = req.query.city;
-  console.log('city: ', city_toBeSearched);
+  const city_toBeSearched = req.query.search_query;
+  
   const superQueryParam = {
     key: WEATHERBIT_API_KEY,
     units: 'I',
-    days: 7,
+    days: 8,
     city: city_toBeSearched
   }
   
   superagent.get(weatherBit_Url) 
   .query(superQueryParam)
-  .then(result_weather => {
-    console.log('result_weather',result_weather.body);
-    const sevenDayCast = new WeatherData(result_weather.body.data); 
-      return sevenDayCast;
-      res.send(sevenDayCast).status(200);
-    })
+  .then((req) => {
+    const result = req.body.data;
+    const sevenDayCast = result.map(val =>new WeatherData(val.weather.description, val.datetime))
 
-  .catch(error =>{  
-      // console.log('result_weather',result_weather);
-      res.send(`${error} We're sorry, that information is no longer available`).status(500)
-    })
-  
-
+    res.send(sevenDayCast).status(200)    
+  })
+  .catch(error => res.send(`${error} We're sorry, that information is no longer available`)
+    .status(500))
 });
 
-//==== constructor for /weather data from JSON ====//
-function WeatherData(result_weather){
-  this.forecast = result_weather.description;
-  this.time = result_weather.datetime;  
+//==== constructor for /weather data from Weatherbit_API ====//
+function WeatherData(forecast, time){
+  this.forecast = forecast;
+  this.time = time;  
 }
 
-// === where my logs At route? ====//
 
-// app.get('/',(req, res) =>{
-//  const iAm = console.log('who am I?');
-//  res.send(iAm);
-// })
+
 
 
 
