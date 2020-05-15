@@ -1,23 +1,27 @@
 'use strict';
 
 const express = require('express'); // sets express dependency
-const app = express();  // invokes express
-require('dotenv').config();  // sets .env dependency inline per .env docs
+const cors = require('cors');  // sets cors dependency allowing server to interact with other servers and urls. 
+const pg = require('pg');
 const superagent = require('superagent');  // sets superagent dependency- necessary for api request processing. 
 
-const PORT = process.env.PORT;
-const cors = require('cors');  // sets cors dependency allowing server to interact with other servers and urls. 
+require('dotenv').config();  // sets .env dependency inline per .env docs
 
-//===== API_KEY_VARIABLES =======//
-const GEOCODE_API_KEY = process.env.GEOCODE_API_KEY;
-const WEATHERBIT_API_KEY = process.env.WEATHERBIT_API_KEY;
+const PORT = process.env.PORT; // sets port for localhost
+const app = express();  // invokes express
+
 app.use(cors()); // invokes use method on express, passing in the cors invocation. 
+
+//=== DataBase Config ===//
+const client = new pg.Client(process.env.POSTGRESS_URL)
+client.on('error', console.error);
+client.connect();
 
 
 
 //===== location data with the Json ===//
 app.get('/location', (req, res) => {
-  console.log('here:');
+  const GEOCODE_API_KEY = process.env.GEOCODE_API_KEY;
   const locatIq_Url = 'https://us1.locationiq.com/v1/search.php'; //childOf locationIQ
   const city_toBeSearched = req.query.city; // childOf front-end
   const superQueryParam = {
@@ -44,7 +48,7 @@ function LocationData(city_toBeSearched, result_locatIq){
 
 // === weather data using .map and Json file ==//
 app.get('/weather', (req, res) => {
-  
+  const WEATHERBIT_API_KEY = process.env.WEATHERBIT_API_KEY;
   const weatherBit_Url = 'https://api.weatherbit.io/v2.0/forecast/daily';
   const city_toBeSearched = req.query.search_query;
   
