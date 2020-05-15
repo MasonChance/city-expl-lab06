@@ -19,8 +19,11 @@ client.connect();
 
 
 
-//===== location data with the Json ===//
-app.get('/location', (req, res) => {
+//===== Routes ===//
+app.get('/location', getLocation)
+ 
+
+function getLocation(req, res){
   const GEOCODE_API_KEY = process.env.GEOCODE_API_KEY;
   const locatIq_Url = 'https://us1.locationiq.com/v1/search.php'; //childOf locationIQ
   const city_toBeSearched = req.query.city; // childOf front-end
@@ -29,13 +32,34 @@ app.get('/location', (req, res) => {
     key: GEOCODE_API_KEY, 
     format: 'json'
   };
-  
   superagent.get(locatIq_Url)
-    .query(superQueryParam)
-    .then(result_locatIq => res.send(new LocationData(city_toBeSearched, result_locatIq.body[0])).status(200))
-    .catch(error => res.send(`${error} something went wrong`).status(500))
+  .query(superQueryParam)
+  .then(result_locatIq => checkDataBase(city_toBeSearched, result_locatIq))
+  .catch(error => res.send(`${error} something went wrong`).status(500))  
 
-});
+}     
+
+function databaseSavePlus(city_toBeSearched, result_locatIq){
+  const location_Obj = new LocationData(city_toBeSearched, result_locatIq.body[0])
+  const sqlQuery = 'INSERT INTO locations(latitude, search_query, longitude, formatted_query) VALUES($1, $2, $3, $4)';
+  const sqlVal = [location_Obj.latitude, location_Obj.search_query, location_Obj.longitude, location_Obj.formatted_query];
+
+  client.query(sqlQuery, sqlVal);
+  return location_Obj;
+}
+
+function checkDataBase (city_toBeSearched, result_locatIq){
+  const sqlQuery = 'SELECT * FROM locations WHERE search_query=$1';
+  const sqlVal = [city_toBeSearched];
+  client.query(sqlQuery, sqlVal)
+    .then(result_sql => {
+      if(result_sql.rowCount > 0){
+        return result_sql.rows[0];
+      }else{
+       return databaseSavePlus(city_toBeSearched, result_locatIq);
+      }   
+    })
+}
 
 // ==== Location data Constructor for LocationIQ Data =====// 
 function LocationData(city_toBeSearched, result_locatIq){
@@ -45,6 +69,7 @@ function LocationData(city_toBeSearched, result_locatIq){
   this.latitude = result_locatIq.lat;
   this.longitude = result_locatIq.lon;
 }
+
 
 // === weather data using .map and Json file ==//
 app.get('/weather', (req, res) => {
@@ -64,11 +89,10 @@ app.get('/weather', (req, res) => {
   .then((req) => {
     const result = req.body.data;
     const sevenDayCast = result.map(val =>new WeatherData(val.weather.description, val.datetime))
-
+    
     res.send(sevenDayCast).status(200)    
   })
-  .catch(error => res.send(`${error} We're sorry, that information is no longer available`)
-    .status(500))
+  .catch(error => res.send(`${error} We're sorry, We can't find that`).status(500))
 });
 
 //==== constructor for /weather data from Weatherbit_API ====//
@@ -76,9 +100,6 @@ function WeatherData(forecast, time){
   this.forecast = forecast;
   this.time = time;  
 }
-
-
-
 
 
 
