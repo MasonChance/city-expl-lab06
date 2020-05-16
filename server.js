@@ -8,7 +8,7 @@ require('dotenv').config();
 const PORT = process.env.PORT; 
 const app = express();  
 
-app.use(cors()); 
+app.use(cors({origin:'https://codefellows.github.io'})); 
 
 //==== Handlers =====///
 
@@ -20,7 +20,7 @@ const getForecast = require('./modules-js/weather.js');
 app.get('/location', getLocation);
 app.get('/weather', getForecast);
 
-//!!! troubleshooting console.logs !!!
+
 
 
 
