@@ -35,7 +35,10 @@ function getLocation (req, res){
   client.query(sqlQuery, sqlVal)
     .then(result_sql => {
       if(result_sql.rowCount > 0){
-        return result_sql.rows[0]; //!!!check value && typeof <result_sql>
+        const record = result_sql.rows;
+        console.log(`result_sql.rows @36: ${result_sql.rows[0].search_query}`);
+        const location_Obj = new LocationData(record, city_toBeSearched)
+        return location_Obj; //!!!check value && typeof <result_sql>
       }else{
         const locatIq_Url = 'https://us1.locationiq.com/v1/search.php';        
         const queryParam = new LocationData.superQueryParam(city_toBeSearched);
@@ -53,8 +56,8 @@ function getLocation (req, res){
 function databaseSavePlus(city_toBeSearched, result_locatIq, res){
   const location_Obj = new LocationData(result_locatIq.body, city_toBeSearched)
   const sqlQuery = 'INSERT INTO locations(latitude, search_query, longitude, formatted_query) VALUES($1, $2, $3, $4)';
+  console.log('location_obj:', location_Obj);
   const sqlVal = [location_Obj.latitude, location_Obj.search_query, location_Obj.longitude, location_Obj.formatted_query];
-  console.log(`resule_locatIQ @ ln:62: ${result_locatIq}`);
   client.query(sqlQuery, sqlVal);
   res.send(location_Obj) ;
 }
