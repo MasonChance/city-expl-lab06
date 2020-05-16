@@ -2,7 +2,7 @@
 
 const pg = require('pg');
 const superagent = require('superagent');
-const client = new pg.Client(process.env.POSTGRESS_URL);
+const client = new pg.Client(process.env.DATABASE_URL);
 
 client.on('error', console.error);
 client.connect();
