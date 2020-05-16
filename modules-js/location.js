@@ -36,9 +36,9 @@ function getLocation (req, res){
     .then(result_sql => {
       if(result_sql.rowCount > 0){
         const record = result_sql.rows;
-        console.log(`result_sql.rows @36: ${result_sql.rows[0].search_query}`);
+        console.log(`record @36: ${record[0].latitude}`);
         const location_Obj = new LocationData(record, city_toBeSearched)
-        return location_Obj; //!!!check value && typeof <result_sql>
+        res.send(location_Obj);
       }else{
         const locatIq_Url = 'https://us1.locationiq.com/v1/search.php';        
         const queryParam = new LocationData.superQueryParam(city_toBeSearched);
