@@ -15,6 +15,7 @@ const getLocation = require('./modules-js/location.js');
 const getForecast = require('./modules-js/weather.js');
 
 //===== Routes ===//
+app.get('/', 'https://codefellows.github.io/code-301-guide/curriculum/city-explorer-app/front-end/');
 app.get('/location', getLocation);
 app.get('/weather', getForecast);
 

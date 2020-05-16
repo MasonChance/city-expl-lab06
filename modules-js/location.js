@@ -1,5 +1,4 @@
 'use strict';
-// const express = require('express');
 
 const pg = require('pg');
 const superagent = require('superagent');
