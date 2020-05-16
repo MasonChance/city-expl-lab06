@@ -1,5 +1,6 @@
 'use strict';
-
+// const express = require('express');
+require('dotenv').config();
 const pg = require('pg');
 const superagent = require('superagent');
 const client = new pg.Client(process.env.POSTGRESS_URL);
@@ -27,13 +28,15 @@ LocationData.superQueryParam = function(city_toBeSearched) {
 
 function getLocation(req, res){
   const locatIq_Url = 'https://us1.locationiq.com/v1/search.php';
-  const city_toBeSearched = req.query.city; 
-  
+  const city_toBeSearched = req.query.city; //[x]
+ console.log(`req.query.Response: ${req.body}`)
+
   superagent.get(locatIq_Url)
   .query(LocationData.superQueryParam)
+
   .then(result_locatIq => checkDataBase(city_toBeSearched, result_locatIq))
   .catch(error => res.send(`${error} something went wrong`).status(500))  
-
+  console.log('result_locatIq:',req.Response)
 }     
 
 //parentOf client.query('check') && databaseSavePlus childOf getLocation()
@@ -64,4 +67,4 @@ function databaseSavePlus(city_toBeSearched, result_locatIq){
 
 
 
-module.exports = getLocation;
+module.exports = getLocation; //[x] export works

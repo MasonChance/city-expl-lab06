@@ -18,6 +18,12 @@ const getForecast = require('./modules-js/weather.js');
 app.get('/location', getLocation);
 app.get('/weather', getForecast);
 
+//!!! troubleshooting console.logs !!!
+
+
+
+
+
 // ===== spins up server on local and tests it===// see https://limitless-peak-33770.herokuapp.com/ for deployed app. 
 
 app.listen(PORT, () => console.log(`Am I Dead Enough for Life?: ${PORT} !!`)); // local host server test
