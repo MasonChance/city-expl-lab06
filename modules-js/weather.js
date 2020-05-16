@@ -19,12 +19,11 @@ WeatherData.superQueryParam = function(req){
 
 function getForecast(req, res){
   const weatherBit_Url = 'https://api.weatherbit.io/v2.0/forecast/daily';
-  const result = req.body.data;
-
+  const weatherQuery = new WeatherData.superQueryParam(req);
   superagent.get(weatherBit_Url) 
-  .query(WeatherData.superQueryParam)
-  .then(() => {
-    res.send(result.map(val => new WeatherData(val.weather.description, val.datetime))).status(200)
+  .query(weatherQuery)
+  .then(result => {
+    res.send(result.body.data.map(val => new WeatherData(val.weather.description, val.datetime))).status(200)
   })
   .catch(error => res.send(`${error} We're sorry, We can't find that`).status(500))
 }
