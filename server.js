@@ -14,12 +14,12 @@ app.use(cors({origin:'https://codefellows.github.io'}));
 
 const getLocation = require('./modules-js/location.js');
 const getForecast = require('./modules-js/weather.js');
-
+// const trailsNear = require('./modules-js/trails.js')
 //===== Routes ===//
 
 app.get('/location', getLocation);
 app.get('/weather', getForecast);
-
+// app.get('/trails', trailsNear);
 
 
 
